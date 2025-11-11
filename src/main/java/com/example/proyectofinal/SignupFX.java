@@ -114,7 +114,7 @@ public class SignupFX extends Application {
         String marital = selectedMarital.getText();
 
         try {
-            Conn conn = new Conn(); // Usamos tu clase Conn
+            Conn conn = new Conn();
             Connection c = conn.getConnection();
             String query = "INSERT INTO signup (formno, name, dob, gender, email, marital, address, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = c.prepareStatement(query);
@@ -131,13 +131,23 @@ public class SignupFX extends Application {
             stmt.executeUpdate();
             conn.close();
 
-            showAlert(Alert.AlertType.INFORMATION, "✅ Form submitted successfully!");
+            showAlert(Alert.AlertType.INFORMATION, "✅ Page 1 saved successfully!");
+
+            // 👉 Abrir Signup2FX
+            Signup2FX signup2 = new Signup2FX(formno);
+            Stage stage2 = new Stage();
+            signup2.start(stage2);
+
+            // Cerrar la ventana actual
+            Stage currentStage = (Stage) nameField.getScene().getWindow();
+            currentStage.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "❌ Database error: " + ex.getMessage());
         }
     }
+
 
     private void showAlert(Alert.AlertType type, String message) {
         Alert alert = new Alert(type);
