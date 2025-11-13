@@ -126,7 +126,8 @@ public class LoginFX extends Application {
 
         try {
             Conn conn = new Conn();
-            String query = "SELECT * FROM login WHERE cardno = ? AND pin = ?";
+            // 🔹 Usa el nombre correcto de columna (cardnumber)
+            String query = "SELECT * FROM login WHERE cardnumber = ? AND pin = ?";
             PreparedStatement ps = conn.getConnection().prepareStatement(query);
             ps.setString(1, cardno);
             ps.setString(2, pin);
@@ -135,8 +136,9 @@ public class LoginFX extends Application {
             if (rs.next()) {
                 messageLabel.setStyle("-fx-text-fill: green;");
                 messageLabel.setText("✅ Login successful!");
-                // Aquí podrías abrir la ventana de Transacciones
-                // new TransactionsFX(pin).start(new Stage());
+
+                // 🔹 Abre TransactionsFX con el pin actual
+                new TransactionsFX(pin).start(new Stage());
                 stage.close();
             } else {
                 messageLabel.setStyle("-fx-text-fill: red;");
@@ -151,6 +153,7 @@ public class LoginFX extends Application {
             messageLabel.setText("⚠️ Database error.");
         }
     }
+
 
     public static void main(String[] args) {
         launch(args);

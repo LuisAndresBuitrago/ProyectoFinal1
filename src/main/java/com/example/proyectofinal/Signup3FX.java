@@ -20,7 +20,7 @@ public class Signup3FX extends Application {
     private CheckBox atmCard, mobileBanking, emailAlerts, chequeBook;
 
     public Signup3FX() {
-        this.formno = "0000"; // valor temporal
+        this.formno = "0000"; // valor temporal si no viene desde Signup2
     }
 
     public Signup3FX(String formno) {
@@ -34,7 +34,7 @@ public class Signup3FX extends Application {
         Label title = new Label("Page 3: Account Details");
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
 
-        // Account Type
+        // Tipo de cuenta
         Label accountTypeLabel = new Label("Account Type:");
         RadioButton savingAcc = new RadioButton("Saving Account");
         RadioButton fixedAcc = new RadioButton("Fixed Deposit Account");
@@ -47,25 +47,24 @@ public class Signup3FX extends Application {
         currentAcc.setToggleGroup(accountTypeGroup);
         recurringAcc.setToggleGroup(accountTypeGroup);
 
-        // Card and PIN
+        // Card y PIN
         Label cardLabel = new Label("Card Number:");
         Label cardValue = new Label("XXXX-XXXX-XXXX-4184");
-
         Label pinLabel = new Label("PIN:");
         Label pinValue = new Label("XXXX");
 
-        // Services
+        // Servicios
         Label servicesLabel = new Label("Services Required:");
         atmCard = new CheckBox("ATM Card");
         mobileBanking = new CheckBox("Mobile Banking");
         emailAlerts = new CheckBox("EMAIL Alerts");
         chequeBook = new CheckBox("Cheque Book");
 
-        // Declaration
+        // Declaración
         CheckBox declaration = new CheckBox("I hereby declare that the above entered details are correct to the best of my knowledge.");
         declaration.setSelected(true);
 
-        // Buttons
+        // Botones
         Button submitBtn = new Button("Submit");
         submitBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
         submitBtn.setOnAction(e -> saveToDatabase());
@@ -122,11 +121,11 @@ public class Signup3FX extends Application {
         long first3 = (ran.nextLong() % 9000L) + 1000L;
         String pin = "" + Math.abs(first3);
 
-        String facility = "";
-        if (atmCard.isSelected()) facility += " ATM Card";
-        if (mobileBanking.isSelected()) facility += " Mobile Banking";
-        if (emailAlerts.isSelected()) facility += " EMAIL Alerts";
-        if (chequeBook.isSelected()) facility += " Cheque Book";
+        StringBuilder facility = new StringBuilder();
+        if (atmCard.isSelected()) facility.append("ATM Card ");
+        if (mobileBanking.isSelected()) facility.append("Mobile Banking ");
+        if (emailAlerts.isSelected()) facility.append("EMAIL Alerts ");
+        if (chequeBook.isSelected()) facility.append("Cheque Book ");
 
         try {
             Conn conn = new Conn();
@@ -139,7 +138,7 @@ public class Signup3FX extends Application {
             stmt1.setString(2, accountType);
             stmt1.setString(3, cardNumber);
             stmt1.setString(4, pin);
-            stmt1.setString(5, facility);
+            stmt1.setString(5, facility.toString().trim());
             stmt1.executeUpdate();
 
             // Inserta en login

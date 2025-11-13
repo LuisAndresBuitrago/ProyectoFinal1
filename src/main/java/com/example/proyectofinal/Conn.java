@@ -12,21 +12,14 @@ public class Conn {
 
     public Conn() {
         try {
-            // Registrar el driver JDBC
             Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // Conectar a la base de datos (asegúrate que el nombre esté bien escrito)
             c = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/sistemadegestiondebanco",
                     "root",
                     "Urbanperro17"
             );
-
-            // Crear el Statement
             s = c.createStatement();
-
             System.out.println("✅ Conexión exitosa a la base de datos MySQL.");
-
         } catch (ClassNotFoundException e) {
             System.err.println("❌ Error: No se encontró el driver JDBC de MySQL.");
             e.printStackTrace();
@@ -36,7 +29,6 @@ public class Conn {
         }
     }
 
-    // --- Métodos de acceso ---
     public Connection getConnection() {
         return c;
     }
@@ -45,7 +37,6 @@ public class Conn {
         return s;
     }
 
-    // --- Cerrar la conexión correctamente ---
     public void close() {
         try {
             if (s != null) s.close();
